@@ -4,3 +4,5 @@ typing-extensions>=4.8.0  # For enhanced type hints
 pathlib==1.0.1  # For cross-platform path handling
 google-genai>=1.1.0  # For Google's Generative AI integration
 pydantic-ai[logfire]>=0.0.23  # For AI-powered data validation with logging
+python-dotenv>=1.0.1  # For environment variable management
+logfire>=0.8.0  # For structured logging (pydantic-ai dependency)

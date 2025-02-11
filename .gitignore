@@ -4,6 +4,8 @@
 # PDF and MD files in dados folder
 dados/**/*.pdf
 dados/**/*.md
+dados/**/*.pdf
+dados/**/*.json
 
 # Log files
 *.log
