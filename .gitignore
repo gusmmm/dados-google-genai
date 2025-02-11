@@ -1,0 +1,9 @@
+# Environment variables
+.env
+
+# PDF and MD files in dados folder
+dados/**/*.pdf
+dados/**/*.md
+
+# Log files
+*.log

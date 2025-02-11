@@ -1,0 +1,2 @@
+PyMuPDF>=1.23.0  # For PDF text extraction
+rich>=13.0.0    # For beautiful terminal output and progress bars
