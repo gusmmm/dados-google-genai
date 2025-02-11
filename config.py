@@ -3,7 +3,7 @@
 from pathlib import Path
 
 # Model settings
-MODEL_NAME = 'gemini-2.0-flash'
+MODEL_NAME =  'gemini-2.0-flash' #'gemini-2.0-pro-exp-02-05' #
 MODEL_TEMPERATURE = 0.0
 
 # File paths
@@ -16,3 +16,7 @@ GLOSSARY_PATH = Path("instructions") / "PT-glossario.md"
 LOG_FILE = "extraction.log"
 LOG_FORMAT = '%(asctime)s - %(levelname)s - %(message)s'
 LOG_LEVEL = "INFO"
+
+# Batch processing settings
+MAX_FILES = None  # Set to a number to limit files processed, None for all files --> MAX_FILES = None # Process all files
+MAX_WORKERS = 3   # Number of parallel workers for processing

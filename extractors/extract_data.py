@@ -72,7 +72,7 @@ Search for these fields in these specific locations:
 2. gender: In admission note section, "Feminino" → "F" or "Masculino" → "M"
 3. full_name: In admission note section, full name after birth date
 4. date_of_birth: In admission note section, date in format yyyy-mm-dd → convert to dd-mm-yyyy
-5. process_number: In admission note section, number in the line before "Nº Processo:"
+5. process_number: In admission note section, the process number us in the line before the line containing "Nº Processo:."
 6. address: In admission note section, complete street address and postal code before "Data Nasc:"
 7. admission_date: In admission note section, date after "Data de admissão na UQ:" or similar text indicating admission to burns unit → format as dd-mm-yyyy
 8. admission_time: In admission note section, time after "Hora de admissão na UQ:" or similar text indicating admission time → format as hh:mm
