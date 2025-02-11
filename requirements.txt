@@ -1,2 +1,6 @@
-PyMuPDF>=1.23.0  # For PDF text extraction
-rich>=13.0.0    # For beautiful terminal output and progress bars
+PyMuPDF==1.23.7  # For PDF text extraction
+rich==13.7.0    # For beautiful terminal output and progress bars
+typing-extensions>=4.8.0  # For enhanced type hints
+pathlib==1.0.1  # For cross-platform path handling
+google-genai>=1.1.0  # For Google's Generative AI integration
+pydantic-ai[logfire]>=0.0.23  # For AI-powered data validation with logging

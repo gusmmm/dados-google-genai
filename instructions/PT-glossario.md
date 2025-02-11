@@ -1,0 +1,61 @@
+This file is a dictionary and glossary of words and terms in european portuguese in the context of natural language of medical texts and notes.
+Use this to lookup ambiguous expressions, acronyms, and abbreviations.
+The list contains the expression on the left separated by ":" from its meaning on the right. It may be followed by "=" to explain in english. Here it is:
+- unit: unidade de queimados = critical care burns unit
+- UCIP: unidade de cuidados intensivos polivalente = general critical care unit (not critical care burns unit)
+- UQ: unidade de queimados = critical care burns unit
+- C.H.S.J. : centro hospitalar são joão = são joão hospital centre
+- H.S.JOAO-INT: hospital de são joão internamento
+- SERVIÇO DE UNIDADE QUEIMADOS : the same as unidade de queimados
+- SERVIÇO DE CIRURGIA PLASTICA E RECONST. : serviço de cirurgia plástica e reconstrutiva
+- AP : antecedentes pessoais = personal medical history
+- MH : medicação habitual = usual medication before hospital admission
+- HDA : história da doença atual = current illness history
+- SAOS : síndrome de apneia obstrutiva do sono = Obstructive Sleep Apnea Syndrome
+- UMA : preceded by a number it means "unidades maço ano", a measure of packs of cigarets per year (packs-year)
+- S/P : status pós = means that the patient has undergone a procedure in the past
+- BO : bloco operatório = operating room
+- cc : centimetros cubicos = mL (mililiter)
+- cpm : cycles per minute
+- EOT : entubação orotraqueal, can also be "IOT" = orotracheal intubation
+- TOT : tubo orotraqueal = orotracheal tube
+- ATB : antibiótico
+- cm : in a sentence, after expressions such as "TOT" or "EOT", means the depth mark of the tube at the mouth in cm. It is not the size of the tube, it is the depth from the mouth to the tip of the tube.
+- VMI : ventilação mecânica invansive = invasive mechanical ventilation
+- VNI : ventialação não invasiva
+- V-AC : is a type of invasive mecanical ventilation, V is for volume control, AC is "assist-control". It may be followed by numbers, such as 490*20/7/45% which mean 490 mL of tidal volume, 20 cycles per minute, PEEP value of 7, 45% of oxygen mixture. Some numbers may be absent.
+- GSA : gasimetria arterial = arterial blood gas analysis. 
+- sic : means that someone reported that orally, that is unconfirmed, that is, we have no way to confirm at this moment
+- ASC : área de superficie corporal = body surface area. To describe burns area.
+- ASCQ : área de superfície corporal queimada = burned body surface area.
+- "#" : in the context of a bone, means fracture.
+- ratio : also "racio" is a measure of oxygenation. it is the ration of arterial oxygen partial pressure and % of inhaled oxygen.
+- amoxiclav: also "amoxi-clav" or other variants, is an antibiotic - amoxycilin + clavulanate
+- piptaz : also "pptz", "tazobac", "pip-taz" and other variants, is an antibiotic, piperacillin with tazobactam.
+- em curso : means that the result has not yet come out
+- ~ : in the context of describing a burn means "aproximately" or "around"
+- G : in the context of describing a burn, means "degree". Usually preceded by number with ordinal, such as 1º (first), 2º (second) or 3º (third).
+- D : followed by a number means "day". Example: D7 means "seventh day".
+- cir. geral : also "CG" or similar, means general surgery (the specialty).
+- SOS : means "prn", when needed.
+- SU : serviço de urgência = acute patient urgent care unit
+- SE : sala de emergência = emergency room, the room where the most critically ill patients go, not the whole "emergency unit".
+- PCR : can mean 2 things. The first is "cardiac arrest", in a clinical context. The second is "C-reactive protein", in the context of describing analytical values.
+- SBV : suporte basico de vida
+- SAV : suporte avançado de vida
+- ULSSJ : the same as "CHUSJ" and "CHSJ", "HSJ" or "hospital de São João", it is the name of the hospital.
+- id : in the context of medication means "per day"
+- when you see for example "1+0+1" in the context of medication means "one in the morning, zero by lunch, one at night". The numbers can change.
+- em estudo : it means that no definitive conclusion has been reached.
+- sedoanalgesia : it means under both analgesics and sedatives, usualy iv perfusion of strong opioids and strong sedatives to cause anesthesia.
+- Dr(a) : means female medical doctor
+- C. Plastica : cirurgia plástica, the medical specialty.
+- ORL : ENT, the specialty
+- Cex : consulta externa
+- flaminal : it is a medication. Flaminal® is a primary wound dressing for the treatment of acute and chronic wounds, ​infected wounds*​ or wounds at risk of infection. Flaminal® has two formulations to manage exudate levels effectively​: Flaminal® Hydro for slightly to moderately exuding wounds and 
+Flaminal® Forte for moderately to highly exuding wounds
+- O(A) Medico(a) : this means that it can be either a male or female medical doctor
+- cuidados de saude primário : means in general healthcare, not in the hospital. For example, with family doctor or general pratictioners outside the hospital.
+- EO : exame objectivo = objetive analysis of the patient as opposed to medical history and interview
+
+
