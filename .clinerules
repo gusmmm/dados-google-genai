@@ -1,0 +1,112 @@
+# Project Intelligence
+
+## Project Patterns
+1. Three-Tier Architecture
+   - Data Processing
+   - FastAPI Backend
+   - React Frontend
+
+2. Data Flow
+   - PDF → Markdown → Structured JSON → MongoDB
+   - Async operations throughout
+   - Validation at each step
+
+3. Development Practices
+   - Modular architecture
+   - Clear separation of concerns
+   - Type safety with Pydantic
+   - Async-first approach
+
+## Directory Structure
+- dados/
+  - pdf_originals/ (original patient PDF files)
+  - md_files/ (converted markdown)
+  - md_clean_files/ (cleaned markdown)
+  - json/ (structured data)
+- extractors/ (data extraction logic)
+- genai/ (AI integration)
+- pdf_manager/ (PDF processing)
+- backend/ (FastAPI application)
+- frontend/ (React application)
+
+## Implementation Paths
+1. Data Processing Pipeline
+   - PDF → Markdown: pdf_manager/pdf_to_md.py
+   - Markdown Cleaning: pdf_manager/md_clean.py
+   - Data Extraction: extractors/extract_data.py
+   - Batch Processing: extractors/batch_extract.py
+
+2. Backend API
+   - FastAPI routes for CRUD operations
+   - MongoDB integration via Motor
+   - JWT authentication
+   - Async endpoint handlers
+
+3. Frontend Application
+   - React components
+   - API service integration
+   - Route-based navigation
+   - Patient data management UI
+
+## Known Preferences
+1. Development Tools
+   - uv for Python dependency management
+   - Python version via .python-version
+   - npm/yarn for frontend
+   - MongoDB for database
+
+2. Code Organization
+   - Clear module boundaries
+   - Type hints throughout
+   - Async where possible
+   - Comprehensive error handling
+
+3. Data Management
+   - Structured validation with Pydantic
+   - Clear data transformation steps
+   - Efficient batch processing
+   - Proper error handling
+
+## Technical Decisions
+1. Backend
+   - FastAPI for high performance
+   - MongoDB for flexible schema
+   - Motor for async operations
+   - JWT for authentication
+
+2. Frontend
+   - React with Vite
+   - Component-based architecture
+   - Service layer pattern
+   - Data visualization support
+
+3. Data Processing
+   - PDF processing separation
+   - GenAI integration
+   - Pydantic validation
+   - JSON intermediate format
+
+## Development Notes
+1. PDF Processing
+   - Verify document compatibility
+   - Handle various PDF formats
+   - Maintain data integrity
+   - Optimize for performance
+
+2. Data Validation
+   - Use Pydantic throughout
+   - Validate at each step
+   - Handle edge cases
+   - Clear error messages
+
+3. API Design
+   - RESTful endpoints
+   - Clear status codes
+   - Proper error responses
+   - Documentation
+
+4. Frontend Development
+   - Responsive design
+   - Error handling
+   - Loading states
+   - User feedback
