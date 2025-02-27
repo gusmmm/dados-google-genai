@@ -126,65 +126,62 @@ def normalize_burn_degree(degree: str) -> str:
 def extract_burn_data(file_path: str, genai_client) -> BurnData:
     """Extract burn injury data from a markdown file using GenAI."""
     try:
-        # Read markdown file, burn context, and glossary
+        # Read markdown file and glossary
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
         
-        burn_context = load_instructions(str(project_root / "instructions/burns.md"))
         glossary = load_glossary()
         
-        # Prepare prompt for GenAI with explicit instructions
+        # Prepare prompt for GenAI with explicit instructions for handling special values
         system_prompt = f"""
-            Using this burn classification context and Portuguese medical glossary:
+            You are a medical data extraction assistant specialized in burn injuries.
+            Using this Portuguese medical glossary for reference:
             
-            BURN CLASSIFICATION:
-            {burn_context}
-            
-            PORTUGUESE MEDICAL TERMS:
             {glossary}
             
-            Extract burn injury information from Portuguese medical notes into structured data.
-            Use the glossary to interpret medical terms, abbreviations, and expressions.
+            Extract burn injury information from these Portuguese medical notes, following these strict rules:
+
+            1. Boolean Fields (must be exactly true or false, never text):
+               - inhalation_injury: true if explicitly mentioned, false if explicitly denied or not mentioned
+               - pre_hospital_intubation: true if mentioned, false if not mentioned
+               - mechanical_ventilation: true if mentioned, false if not mentioned
+               - is_circumferential: true if explicitly described as circular/circumferential, false otherwise
             
-            Important rules:
-            1. Burn Locations:
-            - the item location must be a body part (e.g., "face", "arm", "leg") in english as in the instructions. Do not state the laterality in the laterality in this item.
-            - the item degree must be a burn depth using EXACTLY one of these values: "1st degree", "2nd degree superficial", "2nd degree deep", "3rd degree", "4th degree"
-            - the item laterality must be "left", "right", or "bilateral" if applicable; null otherwise.
-            - the item location must be unique within the list
-            - the item degree must be unique within the list, use the highest degree if multiple entries for the same location
-            - the item laterality must be null if not applicable
-            - For arms/legs: create separate entries for left/right if bilateral
-            - Circumferential burns only apply to limbs and torso
+            2. Burn Degree Classification (must use EXACTLY these terms):
+               - "1st degree"
+               - "2nd degree superficial"
+               - "2nd degree deep"
+               - "3rd degree"
+               - "4th degree"
+               For any burn described only as "2nd degree", default to "2nd degree deep" if context suggests depth
+               or significant injury, otherwise use "2nd degree superficial"
             
-            2. Total Body Surface Area:
-            - Extract the percentage from ASCQ or ASC value
-            - Remove any ~ or % symbols and convert to float
-            
-            3. Burn Mechanism:
-            - For explosion/gas incidents, use "thermal_flame"
-            - Include specific agent (e.g., "gas") in injury_cause field
+            3. Dates must always be in dd-mm-yyyy format. If no date is available, omit the field entirely
+               rather than using null.
+
+            4. For burn locations: if location is bilateral, create separate entries for left and right sides
+               with appropriate laterality values.
             
             Medical notes: {content}
             
             Output a valid JSON with the following structure:
             {{
-                "injury_date": "<dd-mm-yyyy>", 
+                "injury_date": "<dd-mm-yyyy>",
                 "injury_time": "<HH:MM>",
-                "injury_cause": "<cause description>",
-                "injury_location": ["<location 1>", "<location 2>", ...],
+                "injury_cause": "<cause>",
+                "injury_location": ["<location1>", "<location2>", ...],
                 "burn_degree": [
                     {{
                         "location": "<body part>",
-                        "degree": "<depth classification - use EXACTLY one of these values: '1st degree', '2nd degree superficial', '2nd degree deep', '3rd degree', '4th degree'>",
-                        "laterality": "<left/right/bilateral or null>",
-                        "is_circumferential": <true/false or null>
+                        "degree": "<EXACTLY one of: '1st degree', '2nd degree superficial', '2nd degree deep', '3rd degree', '4th degree'>",
+                        "laterality": "<left/right or null>",
+                        "is_circumferential": true/false
                     }},
                     ...
                 ],
                 "tbsa": <percentage as float>,
-                "inhalation_injury": <true/false>,
-                "pre_hospital_intubation": <true/false>,
+                "inhalation_injury": true/false,
+                "pre_hospital_intubation": true/false,
                 "pre_hospital_fluid": [
                     {{
                         "type": "<fluid type>",
@@ -192,8 +189,8 @@ def extract_burn_data(file_path: str, genai_client) -> BurnData:
                     }},
                     ...
                 ],
-                "pre_hospital_other": "<other pre-hospital treatments or null>",
-                "mechanical_ventilation": <true/false>,
+                "pre_hospital_other": "<other pre-hospital info or null>",
+                "mechanical_ventilation": true/false,
                 "parkland_formula": {{
                     "weight": <weight in kg>,
                     "percentage": <burn percentage>,
@@ -201,16 +198,23 @@ def extract_burn_data(file_path: str, genai_client) -> BurnData:
                     "first_8h": "<volume for first 8 hours in ml>",
                     "next_16h": "<volume for next 16 hours in ml>"
                 }},
-                "consultations": ["<specialty 1>", "<specialty 2>", ...],
+                "consultations": ["<specialty1>", "<specialty2>", ...],
                 "interventions": [
                     {{
                         "date": "<dd-mm-yyyy>",
                         "procedure": "<procedure name>",
-                        "details": "<procedure details or null>"
+                        "details": "<details or null>"
                     }},
                     ...
                 ]
             }}
+            
+            Remember:
+            1. ALL boolean fields must be exactly true or false, never strings
+            2. Burn degrees must match EXACTLY one of the specified values
+            3. Dates must be in dd-mm-yyyy format or omitted entirely
+            4. Never use 'unknown' or 'unspecified' as values
+            5. For missing or unclear data, omit the field rather than using null/unknown
         """
         
         console.print(f"\n[bold cyan]Using model:[/bold cyan] {MODEL_NAME}")
@@ -241,25 +245,41 @@ def extract_burn_data(file_path: str, genai_client) -> BurnData:
             # Parse JSON response
             data = json.loads(json_text)
             
-            # Convert date strings to proper format if they exist
-            for field in ['injury_date']:
-                if data.get(field):
-                    # Ensure date is in dd-mm-yyyy format
-                    parts = data[field].split('-')
-                    if len(parts) == 3:
-                        if len(parts[2]) == 4:  # If year is last (dd-mm-yyyy)
-                            data[field] = f"{parts[0]:0>2}-{parts[1]:0>2}-{parts[2]}"
-                        elif len(parts[0]) == 4:  # If year is first (yyyy-mm-dd)
-                            data[field] = f"{parts[2]:0>2}-{parts[1]:0>2}-{parts[0]}"
+            # Additional validation and normalization
+            if data.get('burn_degree'):
+                for burn in data['burn_degree']:
+                    # Ensure is_circumferential is boolean
+                    if 'is_circumferential' in burn:
+                        if isinstance(burn['is_circumferential'], str):
+                            burn['is_circumferential'] = burn['is_circumferential'].lower() == 'true'
+                    else:
+                        burn['is_circumferential'] = False
+                        
+                    # Handle basic 2nd degree classifications
+                    if burn.get('degree') == '2nd degree':
+                        burn['degree'] = '2nd degree deep'  # Default to deep as safer option
             
-            # Convert time to proper format if it exists
-            if data.get('injury_time'):
-                # Ensure time is in hh:mm format
-                if ':' not in data['injury_time']:
-                    data['injury_time'] = f"{data['injury_time'][:2]}:{data['injury_time'][2:]}"
+            # Ensure boolean fields are actually boolean
+            boolean_fields = ['inhalation_injury', 'pre_hospital_intubation', 'mechanical_ventilation']
+            for field in boolean_fields:
+                if field in data:
+                    if isinstance(data[field], str):
+                        data[field] = data[field].lower() == 'true'
+                else:
+                    data[field] = False
             
-            # Format intervention dates if they exist
+            # Format dates
+            if data.get('injury_date'):
+                parts = data['injury_date'].split('-')
+                if len(parts) == 3:
+                    if len(parts[2]) == 4:  # If year is last (dd-mm-yyyy)
+                        data['injury_date'] = f"{parts[0]:0>2}-{parts[1]:0>2}-{parts[2]}"
+                    elif len(parts[0]) == 4:  # If year is first (yyyy-mm-dd)
+                        data['injury_date'] = f"{parts[2]:0>2}-{parts[1]:0>2}-{parts[0]}"
+            
+            # Format intervention dates
             if data.get('interventions'):
+                filtered_interventions = []
                 for intervention in data['interventions']:
                     if intervention.get('date'):
                         parts = intervention['date'].split('-')
@@ -268,12 +288,11 @@ def extract_burn_data(file_path: str, genai_client) -> BurnData:
                                 intervention['date'] = f"{parts[0]:0>2}-{parts[1]:0>2}-{parts[2]}"
                             elif len(parts[0]) == 4:  # If year is first
                                 intervention['date'] = f"{parts[2]:0>2}-{parts[1]:0>2}-{parts[0]}"
-            
-            # Normalize burn degree values
-            if data.get('burn_degree'):
-                for burn in data['burn_degree']:
-                    if burn.get('degree'):
-                        burn['degree'] = normalize_burn_degree(burn['degree'])
+                        filtered_interventions.append(intervention)
+                    else:
+                        # Skip interventions without dates instead of including null dates
+                        continue
+                data['interventions'] = filtered_interventions
             
             # Validate with Pydantic model
             burn_data = BurnData(**data)
